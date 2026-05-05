@@ -1,4 +1,4 @@
-# libftTester - 42 Gyeongsan Ubuntu Edition
+# libftTester - 42 Gyeongsan
 Enhanced tester for the libft project of 42 school, updated for Ubuntu 24.04 based 42 Gyeongsan systems.
 This fork keeps the original Tripouille-style workflow, but adds broader edge-case coverage, Linux-safe leak tracking, and Makefile validation for common 42 subject requirements.
 Clone this tester in your libft repository, or somewhere else and customize the path to your libft project by changing the LIBFT_PATH variable inside the Makefile.  
