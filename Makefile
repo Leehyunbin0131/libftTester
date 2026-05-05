@@ -27,15 +27,15 @@ $(VSOPEN): vs%:
 	@code $(TESTS_PATH)ft_$*_test.cpp
 
 mandatory_start: update message
-	@tput setaf 6
+	@tput setaf 6 2>/dev/null || true
 	make -C $(LIBFT_PATH)
-	@tput setaf 4 && echo [Tests]
+	@tput setaf 4 2>/dev/null || true; echo [Tests]
 
 update:
 	@:
 
 message: checkmakefile
-	@tput setaf 3 && echo "If all your tests are OK and the moulinette KO you, please run the tester with valgrind (see README)"
+	@tput setaf 3 2>/dev/null || true; echo "If all your tests are OK and the moulinette KO you, please run the tester with valgrind (see README)"
 
 checkmakefile:
 	@sh utils/check_makefile.sh $(LIBFT_PATH)
