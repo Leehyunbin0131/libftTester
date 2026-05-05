@@ -32,13 +32,13 @@ mandatory_start: update message
 	@tput setaf 4 && echo [Tests]
 
 update:
-	@git pull
+	@:
 
 message: checkmakefile
 	@tput setaf 3 && echo "If all your tests are OK and the moulinette KO you, please run the tester with valgrind (see README)"
 
 checkmakefile:
-	@ls $(LIBFT_PATH) | grep Makefile > /dev/null 2>&1 || (tput setaf 1 && echo Makefile not found. && exit 1)
+	@sh utils/check_makefile.sh $(LIBFT_PATH)
 
 $(addprefix docker, $(MANDATORY)) dockerm dockera: docker%:
 	@docker rm -f mc > /dev/null 2>&1 || true
@@ -55,4 +55,4 @@ clean:
 fclean:
 	make fclean -C $(LIBFT_PATH) && rm -rf a.out*
 
-.PHONY:	mandatory_start m a fclean clean update message $(VSOPEN) $(MAIL)
+.PHONY:	mandatory_start m a fclean clean update message checkmakefile $(VSOPEN) $(MAIL)

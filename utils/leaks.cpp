@@ -1,6 +1,14 @@
 #include "leaks.hpp"
 
+#ifdef __linux__
+extern "C" void *__libc_malloc(size_t size);
+extern "C" void __libc_free(void *p);
+#endif
+
 std::vector<ptr> mallocList;
+static bool g_in_malloc_hook = false;
+static void *(*g_libc_malloc)(size_t) = NULL;
+static void (*g_libc_free)(void *) = NULL;
 
 bool operator==(ptr const & p1, ptr const & p2)
 {
@@ -14,9 +22,27 @@ void * malloc(size_t size)
 void * malloc(size_t size) throw()
 #endif
 {
-    void *(*libc_malloc)(size_t) = (void *(*)(size_t))dlsym(RTLD_NEXT, "malloc");
-    void * p = libc_malloc(size);
-    mallocListAdd(p, size);
+    if (g_libc_malloc == NULL)
+    {
+        if (g_in_malloc_hook)
+        {
+#ifdef __linux__
+            return (__libc_malloc(size));
+#else
+            return (NULL);
+#endif
+        }
+        g_in_malloc_hook = true;
+        g_libc_malloc = (void *(*)(size_t))dlsym(RTLD_NEXT, "malloc");
+        g_in_malloc_hook = false;
+    }
+    void * p = g_libc_malloc(size);
+    if (p != NULL && !g_in_malloc_hook)
+    {
+        g_in_malloc_hook = true;
+        mallocListAdd(p, size);
+        g_in_malloc_hook = false;
+    }
     return (p);
 }
 
@@ -27,9 +53,26 @@ void free(void * p)
 void free(void * p) throw()
 #endif
 {
-    void (*libc_free)(void*) = (void (*)(void *))dlsym(RTLD_NEXT, "free");
-    libc_free(p);
-    mallocListRemove(p);
+    if (g_libc_free == NULL)
+    {
+        if (g_in_malloc_hook)
+        {
+#ifdef __linux__
+            __libc_free(p);
+#endif
+            return ;
+        }
+        g_in_malloc_hook = true;
+        g_libc_free = (void (*)(void *))dlsym(RTLD_NEXT, "free");
+        g_in_malloc_hook = false;
+    }
+    g_libc_free(p);
+    if (p != NULL && !g_in_malloc_hook)
+    {
+        g_in_malloc_hook = true;
+        mallocListRemove(p);
+        g_in_malloc_hook = false;
+    }
 }
 
 void mallocListAdd(void * p, size_t size)

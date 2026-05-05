@@ -16,41 +16,81 @@ int main(void)
 	signal(SIGSEGV, sigsegv);
 	title("ft_strtrim\t: ")
 
-	char * s = ft_strtrim("   xxxtripouille", " x");
-	/* 1 */ check(!strcmp(s, "tripouille"));
-	/* 2 */ mcheck(s, strlen("tripouille") + 1); free(s); showLeaks();
+	/* Trim leading */
+	char *s = ft_strtrim("   xxxtripouille", " x");
+	/* 1 trim leading */ check(s && !strcmp(s, "tripouille"));
+	/* 2 size */ mcheck(s, strlen("tripouille") + 1); free(s); showLeaks();
 
+	/* Trim trailing */
 	s = ft_strtrim("tripouille   xxx", " x");
-	/* 3 */ check(!strcmp(s, "tripouille"));
-	/* 4 */ mcheck(s, strlen("tripouille") + 1); free(s); showLeaks();
+	/* 3 trim trailing */ check(s && !strcmp(s, "tripouille"));
+	/* 4 size */ mcheck(s, strlen("tripouille") + 1); free(s); showLeaks();
 
+	/* Trim both */
 	s = ft_strtrim("   xxxtripouille   xxx", " x");
-	/* 5 */ check(!strcmp(s, "tripouille"));
-	/* 6 */ mcheck(s, strlen("tripouille") + 1); free(s); showLeaks();
-	
+	/* 5 trim both */ check(s && !strcmp(s, "tripouille"));
+	/* 6 size */ mcheck(s, strlen("tripouille") + 1); free(s); showLeaks();
+
+	/* Whole string is trimmed */
 	s = ft_strtrim("   xxx   xxx", " x");
-	/* 7 */ check(!strcmp(s, ""));
-	/* 8 */ mcheck(s, 1); free(s); showLeaks();
+	/* 7 all trimmed */ check(s && !strcmp(s, ""));
+	/* 8 size */ mcheck(s, 1); free(s); showLeaks();
 
+	/* Empty input */
 	s = ft_strtrim("", "123");
-	/* 9 */ check(!strcmp(s, ""));
-	/* 10 */ mcheck(s, 1); free(s); showLeaks();
+	/* 9 empty input */ check(s && !strcmp(s, ""));
+	/* 10 size */ mcheck(s, 1); free(s); showLeaks();
 
+	/* Empty set: nothing trimmed */
 	s = ft_strtrim("123", "");
-	/* 11 */ check(!strcmp(s, "123"));
-	/* 12 */ mcheck(s, 4); free(s); showLeaks();
+	/* 11 empty set */ check(s && !strcmp(s, "123"));
+	/* 12 size */ mcheck(s, 4); free(s); showLeaks();
 
+	/* Both empty */
 	s = ft_strtrim("", "");
-	/* 13 */ check(!strcmp(s, ""));
-	/* 14 */ mcheck(s, 1); free(s); showLeaks();
-	
-	s = ft_strtrim("abcdba", "acb");
-	/* opsec-infosec 15 */ check(!strcmp(s, "d"));
- 	/* opsec-infosec 16 */ mcheck(s, 2); free(s); showLeaks();
+	/* 13 both empty */ check(s && !strcmp(s, ""));
+	/* 14 size */ mcheck(s, 1); free(s); showLeaks();
 
+	/* opsec */
+	s = ft_strtrim("abcdba", "acb");
+	/* 15 */ check(s && !strcmp(s, "d"));
+	/* 16 */ mcheck(s, 2); free(s); showLeaks();
+
+	/* mogiyadev */
 	s = ft_strtrim("ababa", "a");
-	/* mogiyadev 17 */ check(!strcmp(s, "bab"));
- 	/* mogiyadev 18 */ mcheck(s, 4); free(s); showLeaks();
+	/* 17 */ check(s && !strcmp(s, "bab"));
+	/* 18 */ mcheck(s, 4); free(s); showLeaks();
+
+	/* No trimming needed */
+	s = ft_strtrim("hello", "x");
+	/* 19 unchanged */ check(s && !strcmp(s, "hello"));
+	/* 20 size */ mcheck(s, 6); free(s); showLeaks();
+
+	/* Single character that is in set */
+	s = ft_strtrim("a", "a");
+	/* 21 single char trimmed */ check(s && !strcmp(s, ""));
+	/* 22 size */ mcheck(s, 1); free(s); showLeaks();
+
+	/* Single character not in set */
+	s = ft_strtrim("a", "b");
+	/* 23 single char untrimmed */ check(s && !strcmp(s, "a"));
+	/* 24 size */ mcheck(s, 2); free(s); showLeaks();
+
+	/* Whitespace trim */
+	s = ft_strtrim(" \t\n  Hello  \n\t ", " \t\n");
+	/* 25 ws trim */ check(s && !strcmp(s, "Hello"));
+	/* 26 size */ mcheck(s, 6); free(s); showLeaks();
+
+	/* Set with multiple chars including duplicates */
+	s = ft_strtrim("aabbccTripouilleabba", "ab");
+	/* 27 */ check(s && !strcmp(s, "ccTripouille"));
+	free(s); showLeaks();
+
+	/* Independent allocation */
+	const char *src = "  hello  ";
+	s = ft_strtrim(src, " ");
+	/* 28 independent */ check(s && s != src && !strcmp(s, "hello"));
+	free(s); showLeaks();
 
 	write(1, "\n", 1);
 	return (0);
