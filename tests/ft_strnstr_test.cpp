@@ -48,8 +48,9 @@ int main(void)
 	/* 18 needle longer */ check(ft_strnstr("abc", "abcd", 100) == NULL); showLeaks();
 
 	/* Length cuts off needle */
-	/* 19 cuts at last char */ check(ft_strnstr("abcdef", "def", 5) == NULL); showLeaks();
-	/* 20 just enough */ check(ft_strnstr("abcdef", "def", 6) == (char *)"abcdef" + 3); showLeaks();
+	char abcdef[] = "abcdef";
+	/* 19 cuts at last char */ check(ft_strnstr(abcdef, "def", 5) == NULL); showLeaks();
+	/* 20 just enough */ check(ft_strnstr(abcdef, "def", 6) == abcdef + 3); showLeaks();
 
 	/* Match at end */
 	char abcxyz[] = "abcXYZ";

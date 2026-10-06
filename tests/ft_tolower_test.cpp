@@ -11,6 +11,7 @@ extern "C"
 #include <string.h>
 #include <ctype.h>
 #include <climits>
+#include <cstdio>
 
 int iTest = 1;
 int main(void)
@@ -38,12 +39,12 @@ int main(void)
 			ok = 0;
 	/* 6 all 'a'..'z' unchanged */ check(ok); showLeaks();
 
-	/* Compare full ASCII range with libc */
+	/* Compare full unsigned-char range with libc */
 	ok = 1;
-	for (int c = 0; c < 128; ++c)
+	for (int c = 0; c <= UCHAR_MAX; ++c)
 		if (ft_tolower(c) != tolower(c))
 			ok = 0;
-	/* 7 entire ASCII matches libc */ check(ok); showLeaks();
+	/* 7 entire unsigned-char matches libc */ check(ok); showLeaks();
 
 	/* Non-letter characters unchanged */
 	/* 8 */ check(ft_tolower('0') == '0'); showLeaks();
@@ -55,10 +56,10 @@ int main(void)
 	/* 14 */ check(ft_tolower('`') == '`'); showLeaks();
 	/* 15 */ check(ft_tolower('{') == '{'); showLeaks();
 
-	/* Special / out-of-range values pass through unchanged */
+	/* EOF and non-letter unsigned-char values pass through unchanged */
 	/* 16 */ check(ft_tolower(0) == 0); showLeaks();
 	/* 17 */ check(ft_tolower(127) == 127); showLeaks();
-	/* 18 */ check(ft_tolower(-1) == -1); showLeaks();
+	/* 18 */ check(ft_tolower(EOF) == EOF); showLeaks();
 	/* 19 */ check(ft_tolower(128) == 128); showLeaks();
 	/* 20 */ check(ft_tolower(255) == 255); showLeaks();
 

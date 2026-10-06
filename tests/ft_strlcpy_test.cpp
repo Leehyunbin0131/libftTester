@@ -22,11 +22,11 @@ int main(void)
 	/* 1 dstsize 0 */ check(ft_strlcpy(dest, src, 0) == strlen(src) && dest[0] == 'A'); showLeaks();
 	/* 2 dstsize 1 */ check(ft_strlcpy(dest, src, 1) == strlen(src) && dest[0] == 0 && dest[1] == 'A'); showLeaks();
 	/* 3 dstsize 2 */ check(ft_strlcpy(dest, src, 2) == strlen(src) && dest[0] == 'c' && dest[1] == 0 && dest[2] == 'A'); showLeaks();
-	/* 4 dstsize huge */ check(ft_strlcpy(dest, src, -1) == strlen(src) && !strcmp(src, dest) && dest[strlen(src) + 1] == 'A'); showLeaks(); memset(dest, 'A', 10);
+	/* 4 full destination capacity */ check(ft_strlcpy(dest, src, sizeof(dest)) == strlen(src) && !strcmp(src, dest) && dest[strlen(src) + 1] == 'A'); showLeaks(); memset(dest, 'A', 10);
 	/* 5 dstsize 6 */ check(ft_strlcpy(dest, src, 6) == strlen(src) && !memcmp(src, dest, 5) && dest[5] == 0); showLeaks(); memset(dest, 'A', 10);
 	/* 6 dstsize 7 */ check(ft_strlcpy(dest, src, 7) == strlen(src) && !memcmp(src, dest, 7)); showLeaks(); memset(dest, 'A', 10);
 	/* 7 dstsize 8 */ check(ft_strlcpy(dest, src, 8) == strlen(src) && !memcmp(src, dest, 7)); showLeaks(); memset(dest, 'A', 10);
-	/* 8 empty src */ check(ft_strlcpy(dest, "", 42) == 0 && !memcmp("", dest, 1)); showLeaks(); memset(dest, 0, 10);
+	/* 8 empty src */ check(ft_strlcpy(dest, "", sizeof(dest)) == 0 && !memcmp("", dest, 1)); showLeaks(); memset(dest, 0, 10);
 	/* 9 src 1 byte dst 0 */ check(ft_strlcpy(dest, "1", 0) == 1 && dest[0] == 0); showLeaks(); memset(dest, 'A', 10);
 
 	/* Heap buffer */

@@ -32,8 +32,8 @@ int main(void)
 	char saved[] = "Tripouille";
 	/* 5 src == dst */ check(ft_memmove(same, same, 10) == same && !memcmp(same, saved, 10)); showLeaks();
 
-	/* NULL is allowed when n == 0 */
-	/* 6 NULL ok when n=0 */ check(ft_memmove(s0, NULL, 0) == s0); showLeaks();
+	/* Even at n == 0, pointers must be valid (C 7.24.1). */
+	/* 6 zero length returns dest unchanged */ check(ft_memmove(s0, s, 0) == s0 && !memcmp(s0, sCpy, 7)); showLeaks();
 
 	/* Long forward overlap shift left */
 	char buf[20]; memcpy(buf, "ABCDEFGHIJ\0\0\0\0\0\0\0\0\0\0", 20);

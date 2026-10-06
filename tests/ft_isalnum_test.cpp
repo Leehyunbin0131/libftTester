@@ -11,6 +11,7 @@ extern "C"
 #include <string.h>
 #include <ctype.h>
 #include <climits>
+#include <cstdio>
 
 int iTest = 1;
 int main(void)
@@ -32,12 +33,12 @@ int main(void)
 	/* 11 */ check(!ft_isalnum('9' + 1)); showLeaks();
 	/* 12 */ check(ft_isalnum('9')); showLeaks();
 
-	/* Compare against libc for entire ASCII range */
+	/* Compare against libc for entire unsigned-char range */
 	int ok = 1;
-	for (int c = 0; c < 128; ++c)
+	for (int c = 0; c <= UCHAR_MAX; ++c)
 		if (!!ft_isalnum(c) != !!isalnum(c))
 			ok = 0;
-	/* 13 full ASCII matches libc */ check(ok); showLeaks();
+	/* 13 full unsigned-char matches libc */ check(ok); showLeaks();
 
 	/* 14 */ check(!ft_isalnum(0)); showLeaks();
 	/* 15 */ check(!ft_isalnum(' ')); showLeaks();
@@ -49,12 +50,10 @@ int main(void)
 	/* 21 */ check(!ft_isalnum(127)); showLeaks();
 	/* 22 */ check(!ft_isalnum(128)); showLeaks();
 	/* 23 */ check(!ft_isalnum(255)); showLeaks();
-	/* 24 */ check(!ft_isalnum(-1)); showLeaks();
-	/* 25 */ check(!ft_isalnum(INT_MAX)); showLeaks();
-	/* 26 */ check(!ft_isalnum(INT_MIN)); showLeaks();
+	/* 24 */ check(!ft_isalnum(EOF)); showLeaks();
 
 	/* Sample valid chars */
-	/* 27 */ check(ft_isalnum('5') && ft_isalnum('m') && ft_isalnum('Q')); showLeaks();
+	/* 25 */ check(ft_isalnum('5') && ft_isalnum('m') && ft_isalnum('Q')); showLeaks();
 
 	write(1, "\n", 1);
 	return (0);

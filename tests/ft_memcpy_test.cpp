@@ -23,9 +23,9 @@ int main(void)
 	ft_memcpy(dest, "coucou", 0);
 	/* 1 zero len no write */ check(dest[0] == 'A'); showLeaks();
 
-	/* Zero length with NULL allowed (n == 0) */
-	char *rtn = (char *)ft_memcpy(dest, NULL, 0);
-	/* 2 NULL allowed when n=0 */ check(rtn == dest && dest[0] == 'A'); showLeaks();
+	/* Even at n == 0, pointers must be valid (C 7.24.1). */
+	char *rtn = (char *)ft_memcpy(dest, "source", 0);
+	/* 2 zero length returns dest unchanged */ check(rtn == dest && dest[0] == 'A'); showLeaks();
 
 	/* Copy bytes including null bytes */
 	char src[] = {0, 0};

@@ -11,6 +11,7 @@ extern "C"
 #include <string.h>
 #include <ctype.h>
 #include <climits>
+#include <cstdio>
 
 int iTest = 1;
 int main(void)
@@ -28,12 +29,12 @@ int main(void)
 	/* 7 */ check(!ft_isalpha('Z' + 1)); showLeaks();
 	/* 8 */ check(ft_isalpha('Z')); showLeaks();
 
-	/* Each character of the entire ASCII range vs libc reference */
+	/* Each character of the entire unsigned-char range vs libc reference */
 	int ok = 1;
-	for (int c = 0; c < 128; ++c)
+	for (int c = 0; c <= UCHAR_MAX; ++c)
 		if (!!ft_isalpha(c) != !!isalpha(c))
 			ok = 0;
-	/* 9 entire ASCII matches libc */ check(ok); showLeaks();
+	/* 9 entire unsigned-char matches libc */ check(ok); showLeaks();
 
 	/* Special values */
 	/* 10 */ check(!ft_isalpha(0)); showLeaks();
@@ -45,13 +46,11 @@ int main(void)
 	/* 16 */ check(!ft_isalpha(127)); showLeaks();
 	/* 17 */ check(!ft_isalpha(128)); showLeaks();
 	/* 18 */ check(!ft_isalpha(255)); showLeaks();
-	/* 19 */ check(!ft_isalpha(-1)); showLeaks(); /* EOF */
-	/* 20 */ check(!ft_isalpha(INT_MAX)); showLeaks();
-	/* 21 */ check(!ft_isalpha(INT_MIN)); showLeaks();
+	/* 19 */ check(!ft_isalpha(EOF)); showLeaks(); /* EOF */
 
 	/* Random sample of letters */
-	/* 22 */ check(ft_isalpha('m') && ft_isalpha('M')); showLeaks();
-	/* 23 */ check(ft_isalpha('q') && ft_isalpha('Q')); showLeaks();
+	/* 20 */ check(ft_isalpha('m') && ft_isalpha('M')); showLeaks();
+	/* 21 */ check(ft_isalpha('q') && ft_isalpha('Q')); showLeaks();
 
 	write(1, "\n", 1);
 	return (0);

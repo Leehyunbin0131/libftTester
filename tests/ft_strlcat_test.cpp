@@ -26,7 +26,7 @@ int main(void)
 	/* 3 dstsize < dstlen */ check(ft_strlcat(dest, src, 3) == 3 + strlen(src) && !strcmp(dest, "BBBB")); showLeaks();
 	/* 4 partial */ check(ft_strlcat(dest, src, 6) == 13 && !strcmp(dest, "BBBBA")); showLeaks();
 	memset(dest, 'C', 5);
-	/* 5 huge dstsize */ check(ft_strlcat(dest, src, -1) == 14 && !strcmp(dest, "CCCCCAAAAAAAAA")); showLeaks();
+	/* 5 full destination capacity */ check(ft_strlcat(dest, src, sizeof(dest)) == 14 && !strcmp(dest, "CCCCCAAAAAAAAA")); showLeaks();
 	memset(dest, 'C', 15);
 	/* 6 dstsize after end */ check(ft_strlcat(dest, src, 17) == 24 && !strcmp(dest, "CCCCCCCCCCCCCCCA")); showLeaks();
 	memset(dest, 0, 30);
@@ -38,7 +38,7 @@ int main(void)
 	memset(dest, 0, 30); memset(dest, '1', 10);
 	/* 10 empty src */ check(ft_strlcat(dest, "", 15) == 10 && !strcmp(dest, "1111111111")); showLeaks();
 	memset(dest, 0, 30);
-	/* 11 empty src empty dst */ check(ft_strlcat(dest, "", 42) == 0 && !strcmp(dest, "")); showLeaks();
+	/* 11 empty src empty dst */ check(ft_strlcat(dest, "", sizeof(dest)) == 0 && !strcmp(dest, "")); showLeaks();
 	memset(dest, 0, 30);
 	/* 12 empty all dstsize 0 */ check(ft_strlcat(dest, "", 0) == 0 && !strcmp(dest, "")); showLeaks();
 	memset(dest, 0, 30);

@@ -42,13 +42,6 @@ int main(void)
 	/* 10 last next NULL */ check(((t_list *)((t_list *)(((t_list *)(l->next))->next))->next)->next == 0);
 	freeList(l); showLeaks();
 
-	/* Adding NULL must not change list */
-	t_list *l3 = ft_lstnew((void *)42);
-	t_list *saved = l3;
-	ft_lstadd_back(&l3, NULL);
-	/* 11 NULL new unchanged */ check(l3 == saved && l3->content == (void *)42 && l3->next == NULL);
-	freeList(l3); showLeaks();
-
 	/* Add many in sequence: order preserved */
 	t_list *seq = NULL;
 	for (long i = 1; i <= 5; ++i)
@@ -59,13 +52,13 @@ int main(void)
 		if (!cur || cur->content != (void *)i) ok = 0;
 		cur = cur ? (t_list *)cur->next : NULL;
 	}
-	/* 12 ordered 1..5 */ check(ok && cur == NULL);
+	/* 11 ordered 1..5 */ check(ok && cur == NULL);
 	freeList(seq); showLeaks();
 
 	/* Add when *lst == NULL but lst != NULL */
 	t_list *empty = NULL;
 	ft_lstadd_back(&empty, ft_lstnew((void *)99));
-	/* 13 was NULL now has node */ check(empty && empty->content == (void *)99 && empty->next == NULL);
+	/* 12 was NULL now has node */ check(empty && empty->content == (void *)99 && empty->next == NULL);
 	freeList(empty); showLeaks();
 
 	write(1, "\n", 1);

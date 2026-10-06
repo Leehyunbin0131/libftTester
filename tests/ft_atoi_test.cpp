@@ -46,10 +46,10 @@ int main(void)
 	/* 20 only sign */ check(ft_atoi("+") == 0); showLeaks();
 	/* 21 only sign minus */ check(ft_atoi("-") == 0); showLeaks();
 
-	/* Match libc atoi */
+	/* Match libc only for values representable as int (C 7.22.1). */
 	const char *samples[] = {
 		"42", "-42", "0", "00042", "  -123abc", "+0", "-0",
-		"2147483647", "-2147483648", "10000000000", /* overflow */
+		"2147483647", "-2147483648",
 		"   +321", "\t\n\v\f\r 99",
 	};
 	int ok = 1;

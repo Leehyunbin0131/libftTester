@@ -11,6 +11,7 @@ extern "C"
 #include <string.h>
 #include <ctype.h>
 #include <climits>
+#include <cstdio>
 
 int iTest = 1;
 int main(void)
@@ -24,12 +25,12 @@ int main(void)
 	/* 3 */ check(!ft_isprint('~' + 1)); showLeaks();
 	/* 4 */ check(ft_isprint('~')); showLeaks();
 
-	/* Entire ASCII matches libc */
+	/* Entire unsigned-char range matches libc */
 	int ok = 1;
-	for (int c = 0; c < 128; ++c)
+	for (int c = 0; c <= UCHAR_MAX; ++c)
 		if (!!ft_isprint(c) != !!isprint(c))
 			ok = 0;
-	/* 5 entire ASCII matches libc */ check(ok); showLeaks();
+	/* 5 entire unsigned-char matches libc */ check(ok); showLeaks();
 
 	/* Control chars must NOT be printable */
 	ok = 1;
@@ -54,12 +55,10 @@ int main(void)
 	/* 11 */ check(!ft_isprint(0)); showLeaks();
 	/* 12 */ check(!ft_isprint('\t')); showLeaks();
 	/* 13 */ check(!ft_isprint('\n')); showLeaks();
-	/* 14 */ check(!ft_isprint(-1)); showLeaks();
-	/* 15 */ check(!ft_isprint(INT_MAX)); showLeaks();
-	/* 16 */ check(!ft_isprint(INT_MIN)); showLeaks();
+	/* 14 */ check(!ft_isprint(EOF)); showLeaks();
 
 	/* Sample valid */
-	/* 17 */ check(ft_isprint('A') && ft_isprint('5') && ft_isprint('!')); showLeaks();
+	/* 15 */ check(ft_isprint('A') && ft_isprint('5') && ft_isprint('!')); showLeaks();
 
 	write(1, "\n", 1);
 	return (0);
